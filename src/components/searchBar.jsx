@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
-import { useWeather } from '../hooks/useWeather'
 import Input from './ui/input.jsx'
 import Button from './ui/button.jsx'
+import { useWeather } from '../context/context.jsx'
 
 const SearchBar = () => {
     const [city, setCity] = useState("")
+    const {fetchWeather, weatherData} = useWeather()
+
     function handleSubmit(e) {
         e.preventDefault()
-        try {
-            const { response, error, loading } = useWeather(city)
-            console.log(response)
-        } catch (error) {
-            console.log(error)
+        if(city.trim()){
+            fetchWeather(city)
         }
+        console.log(weatherData)
     }
     return (
         <div>

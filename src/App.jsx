@@ -1,16 +1,17 @@
 import React from 'react'
-import { useWeather } from './hooks/useWeather'
 import Card from './components/ui/card.jsx'
 import SearchBar from './components/searchBar.jsx'
+import { WeatherProvider } from './context/context.jsx'
 
 const App = () => {
-  const {response, error, loading} = useWeather("Mumbai")
-  console.log(response)
   return (
-    <div>
-      <SearchBar />
+    <WeatherProvider>
+      <div>
+        <SearchBar />
         <Card />
-    </div>
+      </div>
+    </WeatherProvider>
+
   )
 }
 
