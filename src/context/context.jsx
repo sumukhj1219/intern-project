@@ -5,17 +5,17 @@ const WeatherContext = createContext(null);
 
 export const WeatherProvider = ({ children }) => {
     const [weatherData, setWeatherData] = useState(null);
-    const [bg, setBg] = useState("./assets/default.png"); // Default background
+    const [bg, setBg] = useState("./assets/default.png"); 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const fetchWeather = async (city) => {
+    const fetchWeather = async (location) => {
         setLoading(true);
         try {
             const { data } = await axios.get(`https://api.weatherapi.com/v1/current.json`, {
                 params: {
                     key: "cb778abb39de4583867161618252702",
-                    q: city
+                    q: location
                 }
             });
 
@@ -30,9 +30,25 @@ export const WeatherProvider = ({ children }) => {
     };
 
     useEffect(() => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    fetchWeather(`${latitude},${longitude}`); 
+                },
+                (error) => {
+                    console.error("Geolocation error:", error);
+                    fetchWeather("Mumbai"); 
+                }
+            );
+        } else {
+            fetchWeather("Mumbai");
+        }
+    }, []);
+
+    useEffect(() => {
         if (weatherData?.current) {
-            console.log("Weather updated:", weatherData.current.is_day); 
-            setBg(!weatherData.current.is_day ? "./assets/day.png" : "./assets/night.png");
+            setBg(weatherData.current.is_day ? "./assets/day.png" : "./assets/night.png");
         }
     }, [weatherData]); 
 
