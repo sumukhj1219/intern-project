@@ -14,7 +14,7 @@ Responsive UI with a clean design.
 
 Setup
 Clone the repository:
-git clone https://github.com/sumukhj1219/intern-project
+git clone https://github.com/sumukhj1219/intern-project.git
 cd weather-app
 
 Install dependencies:
