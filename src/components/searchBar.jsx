@@ -11,7 +11,8 @@ const SearchBar = () => {
     function handleSubmit(e) {
         e.preventDefault();
         if (city.trim()) {
-            fetchWeather(city);
+            const formattedCity = city.charAt(0).toUpperCase() + city.slice(1).toLowerCase();
+            fetchWeather(formattedCity);
         }
     }
 
