@@ -1,37 +1,52 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
-const WeatherContext = createContext()
+const WeatherContext = createContext(null);
 
 export const WeatherProvider = ({ children }) => {
-    const [weatherData, setWeatherData] = useState(null)
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
+    const [weatherData, setWeatherData] = useState(null);
+    const [bg, setBg] = useState("./assets/default.png"); // Default background
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    const fetchWeather=async(city)=>{
-        setLoading(true)
+    const fetchWeather = async (city) => {
+        setLoading(true);
         try {
-            const {data} = await axios.get(`https://api.weatherapi.com/v1/current.json`, {
-                params:{
-                    key:"cb778abb39de4583867161618252702",
-                    q:city
+            const { data } = await axios.get(`https://api.weatherapi.com/v1/current.json`, {
+                params: {
+                    key: "cb778abb39de4583867161618252702",
+                    q: city
                 }
-            })
-            setWeatherData(data)
-            setError(null)
+            });
+
+            setWeatherData(data); 
+            setError(null);
         } catch (error) {
-            setError(error.message)
-            setWeatherData(null)
+            setError(error.message);
+            setWeatherData(null);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
+
+    useEffect(() => {
+        if (weatherData?.current) {
+            console.log("Weather updated:", weatherData.current.is_day); 
+            setBg(!weatherData.current.is_day ? "./assets/day.png" : "./assets/night.png");
+        }
+    }, [weatherData]); 
 
     return (
-        <WeatherContext.Provider value={{weatherData, loading, error, fetchWeather}}>
+        <WeatherContext.Provider value={{ weatherData, loading, error, fetchWeather, bg }}>
             {children}
         </WeatherContext.Provider>
-    )
-}
+    );
+};
 
-export const useWeather=()=>useContext(WeatherContext)
+export const useWeather = () => {
+    const context = useContext(WeatherContext);
+    if (!context) {
+        throw new Error("useWeather must be used within a WeatherProvider");
+    }
+    return context;
+};

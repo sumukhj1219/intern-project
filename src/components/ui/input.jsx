@@ -1,10 +1,10 @@
 import React from 'react'
 
-const Input = ({placeholder, type, value, onChange}) => {
+const Input = ({placeholder, type, value, onChange, className}) => {
   return (
     <div>
         <input
-        className='w-32 p-4'
+        className={className}
         placeholder={placeholder}
         type={type}
         value={value}
