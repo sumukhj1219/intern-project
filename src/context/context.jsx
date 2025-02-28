@@ -3,14 +3,15 @@ import axios from "axios";
 
 const WeatherContext = createContext(null);
 
-const backgrounds = [
-    "https://cdn.pixabay.com/photo/2016/11/21/03/56/landscape-1844231_1280.png",
-    "https://cdn.pixabay.com/photo/2022/05/18/14/46/sunrise-7205460_1280.png"
-]
+const backgrounds = {
+    day: "https://cdn.pixabay.com/photo/2022/05/18/14/46/sunrise-7205460_1280.png",
+    night: "https://cdn.pixabay.com/photo/2016/11/21/03/56/landscape-1844231_1280.png",
+    rain: "https://cdn.pixabay.com/photo/2022/05/21/22/14/fog-7212392_1280.png"
+};
 
 export const WeatherProvider = ({ children }) => {
     const [weatherData, setWeatherData] = useState(null);
-    const [bg, setBg] = useState(null); 
+    const [bg, setBg] = useState(backgrounds.day); 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -53,7 +54,13 @@ export const WeatherProvider = ({ children }) => {
 
     useEffect(() => {
         if (weatherData?.current) {
-            setBg(weatherData.current.is_day ? backgrounds[1] : backgrounds[0]);
+            const condition = weatherData.current.condition.text.toLowerCase();
+            
+            if (condition.includes("rain")) {
+                setBg(backgrounds.rain);
+            } else {
+                setBg(weatherData.current.is_day ? backgrounds.day : backgrounds.night);
+            }
         }
     }, [weatherData]); 
 
