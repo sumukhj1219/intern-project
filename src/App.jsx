@@ -11,7 +11,7 @@ const App = () => {
     <div
       className="min-h-screen flex flex-col items-center justify-center"
       style={{
-        backgroundImage: `url(https://cdn.pixabay.com/photo/2016/11/21/03/56/landscape-1844231_1280.png)`,
+        backgroundImage: `url(${bg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         transition: "background 0.5s ease-in-out",

@@ -3,9 +3,14 @@ import axios from "axios";
 
 const WeatherContext = createContext(null);
 
+const backgrounds = [
+    "https://cdn.pixabay.com/photo/2016/11/21/03/56/landscape-1844231_1280.png",
+    "https://cdn.pixabay.com/photo/2022/05/18/14/46/sunrise-7205460_1280.png"
+]
+
 export const WeatherProvider = ({ children }) => {
     const [weatherData, setWeatherData] = useState(null);
-    const [bg, setBg] = useState("./assets/default.png"); 
+    const [bg, setBg] = useState(null); 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -48,7 +53,7 @@ export const WeatherProvider = ({ children }) => {
 
     useEffect(() => {
         if (weatherData?.current) {
-            setBg(weatherData.current.is_day ? "./assets/day.png" : "./assets/night.png");
+            setBg(weatherData.current.is_day ? backgrounds[1] : backgrounds[0]);
         }
     }, [weatherData]); 
 
